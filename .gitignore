@@ -31,3 +31,16 @@ env/
 # Frontend
 node_modules/
 dist/
+
+
+# Raw downloaded datasets
+data/raw/
+*.csv.gz
+*.zip
+
+# Keep small processed metadata if desired
+!data/processed/
+# Raw downloaded datasets
+data/raw/
+*.csv.gz
+*.zip

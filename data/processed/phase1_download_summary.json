@@ -1,0 +1,8 @@
+{
+  "flight_rows":330615,
+  "flight_start":"2020-01-01",
+  "flight_end":"2026-06-30",
+  "weather_rows":66074,
+  "weather_start":"2020-01-01 00:13:00",
+  "weather_end":"2025-08-25 23:59:00"
+}
