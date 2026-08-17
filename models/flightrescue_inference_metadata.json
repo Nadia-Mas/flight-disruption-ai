@@ -1,4 +1,5 @@
 {
+  "artifact_version": "research-v2-two-stage-severe",
   "feature_columns": [
     "Reporting_Airline",
     "direction",
@@ -60,12 +61,29 @@
     "other_airport"
   ],
   "any_disruption_model": "hist_gradient_boosting",
-  "any_disruption_threshold": 0.47500000000000014,
+  "any_disruption_threshold": 0.47500000000000003,
   "any_validation_pr_auc": 0.19153536432703636,
   "any_validation_f1": 0.27153622463337607,
-  "severe_disruption_model": "logistic_regression",
-  "severe_disruption_threshold": 0.5500000000000003,
-  "severe_validation_pr_auc": 0.022847951582911728,
-  "severe_validation_f1": 0.05319390770629689,
-  "training_policy": "model and threshold selected on 2024 validation; final estimator refit on 2020-2024"
+  "any_validation_brier": 0.23532534685230783,
+  "any_validation_roc_auc": 0.6220249876780161,
+  "any_test_pr_auc": 0.2106637773186253,
+  "any_test_f1": 0.2763963629615884,
+  "any_test_brier": 0.23964371666982168,
+  "any_test_roc_auc": 0.6345613299715918,
+  "severe_disruption_model": "two_stage:logistic_regression",
+  "severe_probability_mode": "P(any disruption) * P(severe | disruption)",
+  "severe_disruption_threshold": 0.25,
+  "severe_validation_pr_auc": 0.019221095278401105,
+  "severe_validation_f1": 0.04116974350596308,
+  "severe_validation_brier": 0.04024828103578119,
+  "severe_validation_roc_auc": 0.5971820138516711,
+  "severe_test_pr_auc": 0.0811540215717726,
+  "severe_test_f1": 0.07528369775809576,
+  "severe_test_brier": 0.03891603848380349,
+  "severe_test_roc_auc": 0.6617383463337163,
+  "conditional_severe_training_rows_train": 37850,
+  "conditional_severe_training_rows_trainval": 44790,
+  "severe_positive_rate_validation": 0.013412281033634748,
+  "severe_positive_rate_test": 0.013056538678880528,
+  "training_policy": "architectures and thresholds selected on 2024 validation; final estimators refit on 2020-2024; 2025 test metrics are reported without model or threshold selection on test"
 }
