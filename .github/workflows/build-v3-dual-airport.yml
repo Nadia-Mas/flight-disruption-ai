@@ -1,0 +1,44 @@
+name: Build FlightRescue v3 dual-airport model
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/build_v3_dual_airport_model.py'
+      - 'src/models/calibrated.py'
+      - '.github/workflows/build-v3-dual-airport.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flightrescue-v3-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install v3 training dependencies
+        run: pip install pandas numpy scikit-learn joblib requests
+      - name: Build calibrated OGG-LAX-DFW dual-weather models
+        run: python scripts/build_v3_dual_airport_model.py
+      - name: Commit v3 inference artifacts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add models/v3_any_disruption_model.joblib models/v3_conditional_severe_model.joblib models/v3_inference_metadata.json
+          git add data/processed/v3_ogg_lax_dfw_modeling_table_2020_2025.csv.gz
+          git commit -m 'Build calibrated FlightRescue v3 dual-weather artifacts' || exit 0
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Upload v3 metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: flightrescue-v3-metadata
+          path: models/v3_inference_metadata.json
