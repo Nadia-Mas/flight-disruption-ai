@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/build-inference-artifacts.yml'
       - 'scripts/export_inference_artifacts.py'
+      - 'src/flightrescue/composite.py'
       - 'notebooks/03_build_modeling_table.ipynb'
       - 'notebooks/04_validate_and_engineer_features.ipynb'
       - 'notebooks/07_historical_event_recovery_dataset.ipynb'
@@ -35,8 +36,10 @@ jobs:
           python-version: '3.12'
           cache: pip
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Install runtime and research dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install jupyter matplotlib requests
 
       - name: Download public Phase 1 data
         run: |
