@@ -1,70 +1,26 @@
-const form = document.getElementById('scenarioForm');
-const risk = document.getElementById('riskRing');
-const riskLabel = document.getElementById('riskLabel');
-const severeLabel = document.getElementById('severeLabel');
-const recoveryLabel = document.getElementById('recoveryLabel');
-const confidenceLabel = document.getElementById('confidenceLabel');
-
+const $ = (id) => document.getElementById(id);
+const form = $('scenarioForm');
 const API_URL = (window.FLIGHTRESCUE_API_URL || '').replace(/\/$/, '');
+const apiBadge = $('apiBadge');
 
-function showNotConnected() {
-  risk.textContent = '—';
-  riskLabel.textContent = 'Live model API not connected yet';
-  severeLabel.textContent = 'Unavailable';
-  recoveryLabel.textContent = 'Historical engine ready';
-  confidenceLabel.textContent = 'Research demo';
-  risk.style.borderColor = '#6b7280';
-}
+function optionalNumber(id) { const v = $(id).value; return v === '' ? null : Number(v); }
+function setTheme(theme){ document.documentElement.dataset.theme=theme; localStorage.setItem('flightrescue-theme',theme); document.querySelector('meta[name="theme-color"]').content=theme==='dark'?'#06111c':'#ffffff'; }
+setTheme(localStorage.getItem('flightrescue-theme') || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+$('themeToggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
 
-function showApiResult(result) {
-  const pct = Math.round((result.disruption_probability || 0) * 100);
-  risk.textContent = `${pct}%`;
-  riskLabel.textContent = `${String(result.risk_level || 'unknown').replace('_', ' ')} disruption risk`;
-  severeLabel.textContent = `${Math.round((result.severe_disruption_probability || 0) * 100)}%`;
-  recoveryLabel.textContent = result.estimated_recovery_hours != null
-    ? `~${Math.round(result.estimated_recovery_hours)} h`
-    : 'Historical context only';
-  confidenceLabel.textContent = result.confidence || 'Model output';
-  risk.style.borderColor = pct >= 75 ? '#fb7185' : pct >= 55 ? '#f59e0b' : pct >= 35 ? '#6ee7ff' : '#1f5f79';
-}
+function setApiState(text, cls=''){ apiBadge.textContent=text; apiBadge.className=`status-badge ${cls}`; }
+function scenarioPayload(){ return {airline:$('airline').value,direction:$('direction').value,other_airport:$('otherAirport').value.trim().toUpperCase(),scheduled_local:$('scheduledLocal').value,distance_miles:optionalNumber('distance'),event_type:$('eventType').value,temperature_f:optionalNumber('temperature'),humidity_pct:optionalNumber('humidity'),visibility_miles:optionalNumber('visibility'),wind_speed_mph:optionalNumber('windSpeed'),wind_gust_mph:optionalNumber('windGust'),precipitation_in:optionalNumber('precipitation')}; }
+function setLoading(on){ $('analyzeButton').disabled=on; $('analyzeButton').querySelector('span').textContent=on?'Analyzing…':'Analyze Risk'; }
+function showUnavailable(message){ $('riskRing').textContent='—'; $('riskLabel').textContent='AI service unavailable'; $('resultMessage').textContent=message; $('severeLabel').textContent='—'; $('recoveryLabel').textContent='—'; $('confidenceLabel').textContent='—'; $('probabilityText').textContent='—'; $('probabilityBar').style.width='0'; }
+function showResult(r){ const p=Math.max(0,Math.min(1,Number(r.disruption_probability||0))); const pct=Math.round(p*100); const severe=Math.round(Number(r.severe_disruption_probability||0)*100); $('riskRing').textContent=`${pct}%`; $('riskLabel').textContent=`${String(r.risk_level||'model').replaceAll('_',' ')} disruption risk`; $('resultMessage').textContent='Model-backed estimate for the submitted OGG scenario.'; $('severeLabel').textContent=`${severe}%`; $('recoveryLabel').textContent=r.estimated_recovery_hours!=null?`~${Math.round(r.estimated_recovery_hours)} h`:'Context only'; $('confidenceLabel').textContent=r.confidence||'Model output'; $('probabilityText').textContent=`${pct}%`; $('probabilityBar').style.width=`${pct}%`; const c=pct>=75?'var(--danger)':pct>=50?'var(--warn)':pct>=30?'var(--accent)':'var(--success)'; $('riskRing').style.borderColor=c; }
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+form.addEventListener('submit',async(e)=>{ e.preventDefault(); if(!API_URL){showUnavailable('The public backend URL has not been configured yet.');return;} setLoading(true); try{const res=await fetch(`${API_URL}/predict/scenario`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(scenarioPayload())}); const body=await res.json(); if(!res.ok) throw new Error(body.detail||`HTTP ${res.status}`); showResult(body); await loadHistory();}catch(err){showUnavailable(err.message||'Prediction request failed.');}finally{setLoading(false);} });
 
-  if (!API_URL) {
-    showNotConnected();
-    return;
-  }
+function eventCard(e){ const title=e.event_type||e.EVENT_TYPE||e.event_types||e.episode_id||e.event_id||'Historical weather episode'; const date=e.start_date||e.begin_date||e.event_start||e.date||''; const recovery=e.recovery_hours??e.estimated_recovery_hours??e.recovery_time_hours; const cancel=e.cancel_rate_pct??e.cancellation_rate_pct; return `<article class="event-card"><h3>${String(title)}</h3>${date?`<p>${String(date).slice(0,10)}</p>`:''}${cancel!=null?`<p>Cancellation rate: <strong>${Number(cancel).toFixed(1)}%</strong></p>`:''}${recovery!=null?`<p>Recovery proxy: <strong>${Number(recovery).toFixed(1)} h</strong></p>`:''}</article>`; }
+async function loadHistory(){ const box=$('historicalEvents'); if(!API_URL){box.innerHTML='<div class="empty-state">Historical API will activate when the public backend is connected.</div>';return;} box.innerHTML='<div class="empty-state">Loading historical context…</div>'; try{const type=$('eventType').value; const res=await fetch(`${API_URL}/historical/context?event_type=${encodeURIComponent(type)}&k=6`); const body=await res.json(); if(!res.ok) throw new Error(body.detail||`HTTP ${res.status}`); const events=body.events||[]; box.innerHTML=events.length?events.map(eventCard).join(''):'<div class="empty-state">No matching historical episodes returned for this category.</div>';}catch(err){box.innerHTML=`<div class="empty-state">Could not load historical context: ${err.message}</div>`;} }
+$('historyButton').addEventListener('click',loadHistory);
 
-  // The public form is currently a product mockup. It does not yet expose the
-  // full leakage-safe feature dictionary expected by /predict/features.
-  // Keeping this explicit prevents the UI from fabricating model probabilities.
-  risk.textContent = '…';
-  riskLabel.textContent = 'API connected — feature adapter pending';
-  severeLabel.textContent = '—';
-  recoveryLabel.textContent = '—';
-  confidenceLabel.textContent = 'Backend available';
-});
+async function checkApi(){ if(!API_URL){setApiState('Backend pending','offline');showUnavailable('Frontend deployed. Waiting for the public model API URL.');return;} try{const res=await fetch(`${API_URL}/health`);const s=await res.json();if(res.ok&&s.ready){setApiState('AI online','online');$('riskLabel').textContent='AI model online';$('resultMessage').textContent='Enter a scenario to run the trained inference service.';}else{setApiState('Artifacts loading','offline');showUnavailable('API is online, but trained model artifacts are not loaded yet.');}}catch(_){setApiState('API offline','offline');showUnavailable('The model API could not be reached.');}}
 
-async function checkApi() {
-  if (!API_URL) {
-    showNotConnected();
-    return;
-  }
-  try {
-    const response = await fetch(`${API_URL}/health`);
-    const status = await response.json();
-    if (status.ready) {
-      riskLabel.textContent = 'Model API online';
-      confidenceLabel.textContent = 'Artifacts loaded';
-    } else {
-      riskLabel.textContent = 'API online — model artifacts not loaded';
-      confidenceLabel.textContent = 'Setup required';
-    }
-  } catch (err) {
-    riskLabel.textContent = 'Model API unreachable';
-    confidenceLabel.textContent = 'Check backend';
-  }
-}
-
+(function defaultTime(){const d=new Date(Date.now()+86400000);d.setMinutes(Math.ceil(d.getMinutes()/15)*15);const local=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);$('scheduledLocal').value=local;})();
 checkApi();
