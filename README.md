@@ -17,9 +17,31 @@ Given an airport, airline, route, departure time, and current weather event, the
 
 The initial research phase integrates historical flight operations with airport weather observations and severe-weather event records, then uses those aligned data sources to develop disruption-prediction and recovery models.
 
-## Phase 1 data coverage
+## Web prototype
 
-The first downloaded dataset currently covers the following domains:
+A GitHub Pages-compatible FlightRescue AI prototype now lives in `docs/`.
+
+The public UI is designed as a research/product prototype and currently provides a scenario explorer plus project findings. Live trained-model probabilities will be connected through the future inference API; the static page intentionally does not present its illustrative scenario score as a real-time operational prediction.
+
+Expected Pages URL after Pages is enabled for the repository:
+
+`https://nadia-mas.github.io/flight-disruption-ai/`
+
+## Research notebook pipeline
+
+The notebook research phase now consists of nine stages:
+
+1. `01_ogg_data_exploration.ipynb` — source loading and initial OGG exploration.
+2. `02_ogg_phase1_eda.ipynb` — Phase 1 exploratory data analysis.
+3. `03_build_modeling_table.ipynb` — flight + OGG weather + Hawaii storm-event alignment.
+4. `04_validate_and_engineer_features.ipynb` — validation, leakage control, and feature engineering.
+5. `05_baseline_disruption_models.ipynb` — multiclass baseline models.
+6. `06_binary_and_severe_disruption_models.ipynb` — operational binary disruption/severe-disruption models.
+7. `07_historical_event_recovery_dataset.ipynb` — hourly operations and BTS-derived recovery episodes.
+8. `08_historical_similar_event_retrieval.ipynb` — historical analog retrieval and recovery evidence.
+9. `09_flightrescue_inference_pipeline.ipynb` — integration layer for passenger-facing inference.
+
+## Phase 1 data coverage
 
 ### BTS flight operations
 
@@ -27,16 +49,13 @@ The first downloaded dataset currently covers the following domains:
 - Date range available in the current download: **January 2020 through June 2026**
 - July–December 2026 were not yet available from BTS at download time and were skipped.
 - Total OGG flight records downloaded: **330,615**
-- The records include flights arriving at or departing from OGG and contain operational variables such as scheduled and actual times, airline/carrier, origin, destination, delays, cancellation status, diversion status, and reported delay causes when available.
 - Local file: `data/raw/bts/ogg_flights_2020_2026.csv.gz`
 
 ### NOAA Local Climatological Data (LCD)
 
 - Weather station: **Kahului Airport, Maui**
 - Date range successfully downloaded: **2020 through 2025**
-- 2026 LCD data were not available from the source used by the downloader at the time of collection and were skipped.
 - Total weather observations downloaded: **66,074**
-- These observations provide the airport-level weather context used to align conditions with individual flights, including fields such as observation time, wind, gusts, visibility, precipitation, temperature, pressure, and reported weather conditions when present.
 - Local file: `data/raw/weather/ogg_lcd_2020_2026.csv.gz`
 
 ### NOAA Storm Events
@@ -46,28 +65,11 @@ The first downloaded dataset currently covers the following domains:
 - Total Hawaii storm-event records retained: **2,613**
 - Local file: `data/raw/incidents/hawaii_storm_events_2020_2026.csv.gz`
 
-The Storm Events dataset is different from the hourly airport weather data. LCD tells us the measured conditions around OGG at a particular time, while Storm Events tells us whether that period was part of a formally recorded hazardous-weather incident and describes the broader event.
-
-Depending on the event record, Storm Events can provide information such as:
-
-- event type, for example high wind, flash flood, heavy rain, thunderstorm wind, tropical-storm-related conditions, or other severe events;
-- event start and end dates/times;
-- affected county/zone or geographic area;
-- event magnitude and magnitude type when reported;
-- injuries and fatalities when reported;
-- property and crop damage estimates when reported;
-- source of the event report;
-- episode/event identifiers that connect related observations;
-- latitude/longitude or location information when available;
-- narrative descriptions explaining what occurred and the impacts that were observed.
-
-This source will let us create event-level features such as `storm_event_active`, `event_type`, `event_duration`, `event_severity`, and time relative to event start/end. It will also support the historical-analogue component of the project: when a new disruption occurs, the system can retrieve previous Hawaii events with similar weather, timing, airport impact, and flight outcomes and show how quickly operations recovered in those cases.
+LCD provides measured airport conditions around OGG at a particular time, while Storm Events provides broader recorded hazardous-weather context, including event type, start/end time, geography, magnitude when available, impacts, source, identifiers, and narrative descriptions.
 
 ## Phase 1 dataset alignment
 
-The intended unit of analysis is initially **one scheduled flight touching OGG**. For each flight we will align the flight record with the nearest relevant OGG weather observations and any severe-weather event active around that time.
-
-Conceptually:
+The initial unit of analysis is **one scheduled flight touching OGG**:
 
 ```text
 OGG flight at time t
@@ -79,7 +81,7 @@ Hawaii severe-weather event context around time t
 model-ready flight-disruption observation
 ```
 
-The initial target classes are expected to distinguish normal operation, delay, severe delay, cancellation, and potentially diversion. Later phases will also model operational recovery time after a major disruption.
+The project then adds a second event-centric representation for historical weather episodes, airport disruption, airline behavior, and operational recovery.
 
 ## Current raw-data summary
 
@@ -91,38 +93,37 @@ The initial target classes are expected to distinguish normal operation, delay, 
 
 Raw downloaded datasets are intentionally excluded from Git history because they are generated/downloaded artifacts and can be large. They are recreated with the scripts in `scripts/`.
 
-## Planned modeling components
+## Modeling components
 
-1. **Flight Disruption Predictor** — classification of normal, delayed, severely delayed, cancelled, and potentially diverted flights.
-2. **Recovery-Time Model** — estimation of how quickly airport/airline operations normalize after a disruption.
-3. **Historical Analogue Retrieval** — retrieval of similar past weather and operational incidents.
-4. **Explainable AI** — feature-level explanations for individual predictions.
+1. **Flight Disruption Predictor** — flight-level risk estimation.
+2. **Severe Disruption Predictor** — cancellation/severe-delay risk estimation.
+3. **Recovery Intelligence** — BTS-derived operational recovery after event episodes.
+4. **Historical Analogue Retrieval** — similar prior Hawaii weather/airport incidents.
+5. **Inference Layer** — combines risk probabilities, historical evidence, recovery range, severity, and confidence.
+6. **Web Interface** — GitHub Pages-compatible passenger-facing prototype.
 
 ## Project structure
 
 - `data/raw/` — source datasets (not committed to Git)
 - `data/processed/` — cleaned/model-ready datasets
-- `data/incidents/` — derived historical incident records
-- `notebooks/` — research experiments and exploratory analyses
+- `notebooks/` — research experiments and pipeline notebooks 01–09
 - `scripts/` — reproducible data-download scripts
 - `src/preprocessing/` — cleaning and data integration
 - `src/features/` — feature engineering
 - `src/models/` — predictive and recovery models
 - `src/retrieval/` — historical similarity engine
-- `backend/` — future FastAPI inference service
-- `frontend/` — future GitHub Pages-compatible UI
-- `models/` — trained model artifacts (not committed by default)
+- `backend/` — FastAPI inference service target
+- `frontend/` — application frontend development area
+- `docs/` — GitHub Pages static prototype and project documentation
+- `models/` — trained model artifacts
 - `tests/` — automated tests
 
-## Initial roadmap
+## Roadmap
 
-**Phase 1:** OGG historical flight + weather + storm-event dataset and baseline analysis  
-**Phase 2:** disruption prediction model  
-**Phase 3:** operational recovery modeling  
-**Phase 4:** historical-event similarity engine  
-**Phase 5:** explainability and uncertainty  
-**Phase 6:** public web interface
+**Completed research stages:** data acquisition, EDA, modeling-table construction, leakage-safe features, baseline classification, binary/severe risk models, recovery episodes, historical analog retrieval, and inference integration notebook.
+
+**Current software stage:** package inference code and trained artifacts, expose a FastAPI endpoint, connect current weather/event inputs, then wire the API into the GitHub Pages UI.
 
 ## Status
 
-Phase 1 data acquisition is complete for the currently available source periods. The next step is exploratory analysis, temporal alignment, event labeling, and construction of the first model-ready OGG dataset.
+The research notebook pipeline is complete through Notebook 09. A GitHub Pages-compatible FlightRescue AI web prototype has been added under `docs/`; live inference remains the next software-development step.
