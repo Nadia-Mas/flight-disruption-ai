@@ -18,7 +18,7 @@
       <div>
         <p class="eyebrow">Weather-aware flight disruption intelligence</p>
         <h1>Understand disruption risk and what happened in similar Hawaii events.</h1>
-        <p class="lede">Built from OGG flight operations, Kahului weather observations, and NOAA Hawaii Storm Events. The current public page is a research prototype; live model inference will be connected through the API layer.</p>
+        <p class="lede">Built from OGG flight operations, Kahului weather observations, and NOAA Hawaii Storm Events. The public page is the product shell; trained Python inference is provided through the separate FlightRescue API.</p>
       </div>
       <div class="hero-card">
         <div class="metric"><span>330,615</span><small>OGG flight records</small></div>
@@ -30,7 +30,7 @@
     <section class="grid two">
       <article class="panel">
         <h2>Scenario explorer</h2>
-        <p class="muted">Use this to preview the product experience. The score below is an illustrative UI scenario, not the final trained-model prediction.</p>
+        <p class="muted">This is the passenger-facing input design. Live prediction will activate when the deployed API and current-weather feature adapter are connected.</p>
         <form id="scenarioForm" class="form-grid">
           <label>Airport<input value="OGG — Kahului" disabled></label>
           <label>Airline<select id="airline"><option>Hawaiian</option><option>Southwest</option><option>United</option><option>Alaska</option><option>American</option><option>Delta</option></select></label>
@@ -38,24 +38,24 @@
           <label>Wind / gust severity<select id="wind"><option value="0">Low</option><option value="1">Moderate</option><option value="2">High</option><option value="3">Extreme</option></select></label>
           <label>Visibility<select id="visibility"><option value="0">Good</option><option value="1">Reduced</option><option value="2">Poor</option></select></label>
           <label>Regional impact<select id="regional"><option value="0">Maui only / limited</option><option value="1">Several islands</option><option value="2">Statewide</option></select></label>
-          <button type="submit">Explore scenario</button>
+          <button type="submit">Check connection</button>
         </form>
       </article>
 
       <article class="panel result-panel">
         <div class="result-head">
           <div>
-            <p class="eyebrow">Prototype output</p>
-            <h2 id="riskLabel">Low disruption signal</h2>
+            <p class="eyebrow">Inference status</p>
+            <h2 id="riskLabel">Checking model API…</h2>
           </div>
-          <div id="riskRing" class="risk-ring">18%</div>
+          <div id="riskRing" class="risk-ring">—</div>
         </div>
         <div class="result-grid">
-          <div><small>Severe disruption</small><strong id="severeLabel">Low</strong></div>
-          <div><small>Historical recovery</small><strong id="recoveryLabel">~6 h median</strong></div>
-          <div><small>Confidence</small><strong id="confidenceLabel">Prototype only</strong></div>
+          <div><small>Severe disruption</small><strong id="severeLabel">—</strong></div>
+          <div><small>Historical recovery</small><strong id="recoveryLabel">—</strong></div>
+          <div><small>Confidence</small><strong id="confidenceLabel">—</strong></div>
         </div>
-        <div class="notice">Live probabilities will come from the trained Python inference service. This GitHub Pages version intentionally does not claim real-time operational guidance.</div>
+        <div class="notice">This page never substitutes a hand-written score for the trained model. If the inference API is unavailable, the UI reports that state explicitly.</div>
       </article>
     </section>
 
@@ -65,7 +65,7 @@
         <div class="mini"><h3>Flight-level risk</h3><p>Binary disruption and severe-disruption models with temporal validation.</p></div>
         <div class="mini"><h3>Event recovery</h3><p>BTS-derived operational recovery proxy after recorded Hawaii weather episodes.</p></div>
         <div class="mini"><h3>Historical analogs</h3><p>Similarity retrieval based on event/weather context, with outcomes shown only after matching.</p></div>
-        <div class="mini"><h3>Next: live inference</h3><p>FastAPI service + current weather/event inputs + passenger-facing response layer.</p></div>
+        <div class="mini"><h3>API layer</h3><p>FastAPI source is now packaged in the repository for artifact-backed inference and historical retrieval.</p></div>
       </div>
     </section>
 
@@ -77,6 +77,7 @@
   </main>
 
   <footer>FlightRescue AI · Research prototype for Kahului Airport (OGG) · Not an official airline, FAA, or airport advisory service.</footer>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
