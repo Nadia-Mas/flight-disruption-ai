@@ -1,10 +1,6 @@
+fastapi
+uvicorn
 pandas
 numpy
 scikit-learn
-xgboost
-shap
-matplotlib
-jupyter
-requests
-fastapi
-uvicorn
+joblib
