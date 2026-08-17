@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/flight-rescue-logo.png" alt="FlightRescue AI logo" width="180" />
+  <img src="docs/assets/flight-rescue-logo-dark.png" alt="FlightRescue AI logo" width="180" />
 </p>
 
 <h1 align="center">FlightRescue AI — End-to-End Flight Disruption Intelligence</h1>
