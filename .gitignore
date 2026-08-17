@@ -44,3 +44,4 @@ data/raw/
 data/raw/
 *.csv.gz
 *.zip
+*_backup.ipynb
