@@ -1,0 +1,54 @@
+name: Build airline event performance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/build-airline-event-performance.yml'
+      - 'scripts/build_event_airline_performance.py'
+      - 'scripts/download_phase1_data.py'
+      - 'data/processed/ogg_event_similarity_index_2020_2025.csv'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-airline-event-performance
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install aggregation dependencies
+        run: pip install pandas numpy requests
+
+      - name: Build airline performance by historical OGG event
+        run: python scripts/build_event_airline_performance.py
+
+      - name: Commit compact airline-event artifact
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f data/processed/ogg_event_airline_performance_2020_2025.csv
+          if git diff --cached --quiet; then
+            echo 'No airline-event artifact changes.'
+          else
+            git commit -m 'Build OGG airline performance by historical event'
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi
