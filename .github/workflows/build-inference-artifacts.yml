@@ -1,0 +1,87 @@
+name: Build FlightRescue inference artifacts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/build-inference-artifacts.yml'
+      - 'scripts/export_inference_artifacts.py'
+      - 'notebooks/03_build_modeling_table.ipynb'
+      - 'notebooks/04_validate_and_engineer_features.ipynb'
+      - 'notebooks/07_historical_event_recovery_dataset.ipynb'
+      - 'notebooks/08_historical_similar_event_retrieval.ipynb'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-inference-artifacts
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download public Phase 1 data
+        run: |
+          python scripts/download_phase1_data.py
+          python scripts/download_storm_events.py
+
+      - name: Build flight-weather-storm table
+        run: |
+          jupyter nbconvert --to notebook --execute notebooks/03_build_modeling_table.ipynb \
+            --ExecutePreprocessor.timeout=1800 --output-dir /tmp --output 03_executed.ipynb
+
+      - name: Build leakage-safe feature table
+        run: |
+          jupyter nbconvert --to notebook --execute notebooks/04_validate_and_engineer_features.ipynb \
+            --ExecutePreprocessor.timeout=1800 --output-dir /tmp --output 04_executed.ipynb
+
+      - name: Build historical recovery table
+        run: |
+          jupyter nbconvert --to notebook --execute notebooks/07_historical_event_recovery_dataset.ipynb \
+            --ExecutePreprocessor.timeout=1800 --output-dir /tmp --output 07_executed.ipynb
+
+      - name: Build historical similarity index
+        run: |
+          jupyter nbconvert --to notebook --execute notebooks/08_historical_similar_event_retrieval.ipynb \
+            --ExecutePreprocessor.timeout=1800 --output-dir /tmp --output 08_executed.ipynb
+
+      - name: Export trained model artifacts
+        run: python scripts/export_inference_artifacts.py
+
+      - name: Commit deployment artifacts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f models/any_disruption_model.joblib
+          git add -f models/severe_disruption_model.joblib
+          git add -f models/flightrescue_inference_metadata.json
+          git add -f data/processed/ogg_event_similarity_index_2020_2025.csv
+          if git diff --cached --quiet; then
+            echo 'No deployment artifact changes.'
+          else
+            git commit -m 'Build deployable FlightRescue inference artifacts'
+            git push
+          fi
+
+      - name: Upload executed build notebooks
+        uses: actions/upload-artifact@v4
+        with:
+          name: flightrescue-build-notebooks
+          path: /tmp/*_executed.ipynb
+          retention-days: 14
