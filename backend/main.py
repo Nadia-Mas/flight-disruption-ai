@@ -15,11 +15,12 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from flightrescue import FlightRescueService  # noqa: E402
+from flightrescue.weather import NWSAirportWeather  # noqa: E402
 
 app = FastAPI(
     title="FlightRescue AI API",
-    version="0.3.0",
-    description="OGG flight-disruption risk using trained artifacts, official NWS forecast context, and historical airline event evidence.",
+    version="0.4.0",
+    description="FlightRescue research API with trained OGG inference, official NWS weather, historical airline evidence, and v3 dual-airport weather support for OGG/LAX/DFW.",
 )
 
 allowed = os.getenv(
@@ -35,16 +36,17 @@ app.add_middleware(
 )
 
 service = FlightRescueService(ROOT)
+airport_weather = NWSAirportWeather()
 
 
 class FeatureRequest(BaseModel):
-    features: dict[str, Any] = Field(..., description="Leakage-safe model features created by Notebook 04.")
+    features: dict[str, Any] = Field(..., description="Leakage-safe model features created by the research pipeline.")
 
 
 class ScenarioRequest(BaseModel):
     airline: str = Field(..., examples=["AA"])
     direction: Literal["arrival", "departure"] = "departure"
-    other_airport: str = Field(..., min_length=3, max_length=4, examples=["HNL"])
+    other_airport: str = Field(..., min_length=3, max_length=4, examples=["LAX"])
     scheduled_local: str = Field(..., description="OGG-local scheduled date/time, e.g. 2026-08-17T14:30")
     distance_miles: float | None = Field(default=None, ge=0)
     event_type: Literal["auto", "normal", "rain", "wind", "flood", "tropical", "thunderstorm"] = "auto"
@@ -72,13 +74,26 @@ def root() -> dict[str, Any]:
 
 @app.get("/health")
 def health() -> dict[str, Any]:
-    return service.status()
+    status = service.status()
+    status["dual_airport_weather"] = True
+    status["v3_supported_airports"] = ["OGG", "LAX", "DFW"]
+    return status
 
 
 @app.get("/weather/ogg")
 def weather_ogg(scheduled_local: str) -> dict[str, Any]:
     try:
         return service.nws_weather(scheduled_local)
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"NWS lookup failed: {exc}") from exc
+
+
+@app.get("/weather/airport/{airport}")
+def weather_airport(airport: str, scheduled_local: str) -> dict[str, Any]:
+    try:
+        return airport_weather.forecast(airport, scheduled_local)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"NWS lookup failed: {exc}") from exc
 
