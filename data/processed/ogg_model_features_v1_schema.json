@@ -1,0 +1,61 @@
+{
+  "source_file": "/workspaces/flight-disruption-ai/data/processed/ogg_flight_weather_storm_2020_2026.csv.gz",
+  "output_file": "/workspaces/flight-disruption-ai/data/processed/ogg_model_features_v1.csv.gz",
+  "rows": 286759,
+  "columns": 31,
+  "target": "disruption_class",
+  "categorical_features": [
+    "Reporting_Airline",
+    "direction",
+    "other_airport"
+  ],
+  "numeric_features": [
+    "Distance",
+    "CRSDepTime",
+    "CRSArrTime",
+    "sched_hour",
+    "sched_dow",
+    "sched_month",
+    "sched_dayofyear",
+    "is_weekend",
+    "hour_sin",
+    "hour_cos",
+    "month_sin",
+    "month_cos",
+    "covid_era",
+    "weather_age_min",
+    "HourlyDryBulbTemperature_num",
+    "HourlyDewPointTemperature_num",
+    "HourlyRelativeHumidity_num",
+    "HourlyStationPressure_num",
+    "HourlySeaLevelPressure_num",
+    "HourlyVisibility_num",
+    "HourlyWindDirection_num",
+    "HourlyWindSpeed_num",
+    "HourlyWindGustSpeed_num",
+    "HourlyPrecipitation_num"
+  ],
+  "leakage_excluded": [
+    "DepTime",
+    "ArrTime",
+    "DepDelayMinutes",
+    "ArrDelayMinutes",
+    "Cancelled",
+    "CancellationCode",
+    "Diverted",
+    "ActualElapsedTime",
+    "AirTime",
+    "CarrierDelay",
+    "WeatherDelay",
+    "NASDelay",
+    "SecurityDelay",
+    "LateAircraftDelay",
+    "disruption_class"
+  ],
+  "split_definition": {
+    "train": "2020-2023",
+    "validation": "2024",
+    "test": "2025",
+    "holdout_or_uncovered": "other years, including 2026"
+  }
+}
