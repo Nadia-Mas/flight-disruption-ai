@@ -78,6 +78,7 @@ jobs:
             echo 'No deployment artifact changes.'
           else
             git commit -m 'Build deployable FlightRescue inference artifacts'
+            git stash push --include-untracked -m 'generated-build-data' || true
             git fetch origin main
             git rebase origin/main
             git push origin HEAD:main
