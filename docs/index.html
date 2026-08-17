@@ -11,65 +11,67 @@
     .brand-art{width:54px;height:54px;overflow:hidden;border-radius:12px;display:block;flex:0 0 54px}.brand-art img{width:100%;height:100%;object-fit:cover;display:block}
     .hero-logo img{width:min(430px,100%);border-radius:24px;box-shadow:0 24px 55px rgba(10,71,116,.12)}
     .footer-art{width:38px;height:38px;overflow:hidden;border-radius:9px;display:block}.footer-art img{width:100%;height:100%;object-fit:cover}
+    .full-row{grid-column:1/-1}.route-grid{grid-column:1/-1;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end}.swap-button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:var(--text);cursor:pointer;margin-bottom:1px;font-size:18px}
+    .help-text{grid-column:1/-1;margin:-5px 0 2px;font-size:11px;color:var(--muted);line-height:1.45}.help-text.error{color:var(--danger);font-weight:700}
+    .date-time-grid{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:15px}.quick-dates{display:flex;gap:6px;margin-top:7px}.quick-date{border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:5px 9px;border-radius:999px;font-size:10px;cursor:pointer}.timezone-note{display:block;margin-top:6px;font-size:10px;font-weight:500;color:var(--muted)}
+    .weather-preview{grid-column:1/-1;border:1px solid color-mix(in srgb,var(--brand2) 25%,var(--line));background:color-mix(in srgb,var(--brand2) 5%,var(--surface2));padding:14px;border-radius:13px}.weather-preview-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.weather-preview strong{font-size:13px}.weather-preview p{font-size:11px;color:var(--muted);margin:7px 0 0;line-height:1.55}.source-pill{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--success);border:1px solid color-mix(in srgb,var(--success) 30%,var(--line));border-radius:999px;padding:5px 7px;white-space:nowrap}
+    .scenario-note{grid-column:1/-1;font-size:10px;color:var(--muted);margin-top:-7px;line-height:1.45}.analog-summary{margin-top:10px;font-size:11px;line-height:1.55;color:var(--muted);padding:11px 13px;border-radius:9px;background:var(--surface2)}
+    .comparison-wrap{margin-top:22px;overflow:auto}.comparison-wrap h3{font-size:17px;margin:0 0 6px}.comparison-wrap>p{font-size:11px;color:var(--muted);margin:0 0 12px}.comparison-table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}.comparison-table th,.comparison-table td{padding:10px 9px;border-bottom:1px solid var(--line);text-align:right}.comparison-table th:first-child,.comparison-table td:first-child{text-align:left}.comparison-table th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}.comparison-table tr.selected-airline{background:color-mix(in srgb,var(--brand2) 8%,transparent)}.comparison-table tr.selected-airline td:first-child{font-weight:850;color:var(--brand2)}
+    .airport-hint{font-size:10px;color:var(--muted);display:block;margin-top:5px;font-weight:500}
+    @media(max-width:600px){.route-grid{grid-template-columns:1fr}.swap-button{width:100%;height:36px}.date-time-grid{grid-template-columns:1fr}.comparison-wrap{margin-left:-5px;margin-right:-5px}}
   </style>
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="#top" aria-label="Flight Rescue AI home">
-    <span class="brand-art"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt="Flight Rescue AI"><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt="Flight Rescue AI"></span>
-    <span>FLIGHT RESCUE AI</span>
-  </a>
+  <a class="brand" href="#top" aria-label="Flight Rescue AI home"><span class="brand-art"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt="Flight Rescue AI"><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt="Flight Rescue AI"></span><span>FLIGHT RESCUE AI</span></a>
   <nav><a href="#analyze">Analyze</a><a href="#history">History</a><a href="#about">About</a></nav>
   <div class="header-actions"><span id="apiBadge" class="status-badge">Checking AI…</span><button id="themeToggle" class="icon-button" type="button" aria-label="Toggle light and dark mode">◐</button></div>
 </header>
-
 <div class="airline-ribbon" aria-label="Airlines represented in OGG operations"><div class="airline-track">
   <span class="airline-logo aa"><i>◆</i><b>American</b><small>Airlines</small></span><span class="airline-logo delta"><i>▲</i><b>DELTA</b></span><span class="airline-logo united"><i>▦</i><b>UNITED</b></span><span class="airline-logo southwest"><b>Southwest</b><i>♥</i></span><span class="airline-logo alaska"><b>Alaska</b><small>AIRLINES</small></span><span class="airline-logo jetblue"><b>jetBlue</b></span><span class="airline-logo spirit"><b>spirit</b></span><span class="airline-logo hawaiian"><i>✿</i><b>HAWAIIAN</b><small>AIRLINES</small></span><span class="airline-logo frontier"><b>FRONTIER</b><small>AIRLINES</small></span>
   <span class="airline-logo aa"><i>◆</i><b>American</b><small>Airlines</small></span><span class="airline-logo delta"><i>▲</i><b>DELTA</b></span><span class="airline-logo united"><i>▦</i><b>UNITED</b></span><span class="airline-logo southwest"><b>Southwest</b><i>♥</i></span><span class="airline-logo alaska"><b>Alaska</b><small>AIRLINES</small></span><span class="airline-logo jetblue"><b>jetBlue</b></span><span class="airline-logo spirit"><b>spirit</b></span><span class="airline-logo hawaiian"><i>✿</i><b>HAWAIIAN</b><small>AIRLINES</small></span><span class="airline-logo frontier"><b>FRONTIER</b><small>AIRLINES</small></span>
 </div></div>
-
 <main id="top" class="shell">
-  <section class="hero">
-    <div class="hero-copy"><p class="eyebrow">AI-powered disruption intelligence · Kahului, Maui</p><h1>Know the risk.<br><span>Understand what happens next.</span></h1><p class="lede">Flight Rescue AI combines historical OGG operations, official National Weather Service forecasts, Hawaii storm events and machine learning to estimate disruption risk and show what happened during similar events.</p><div class="hero-actions"><a class="primary-link" href="#analyze">Analyze my flight</a><a class="secondary-link" href="#history">Explore historical intelligence</a></div></div>
-    <div class="hero-logo"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt="Flight Rescue AI logo"><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt="Flight Rescue AI logo"></div>
-  </section>
-
+  <section class="hero"><div class="hero-copy"><p class="eyebrow">AI-powered disruption intelligence · Kahului, Maui</p><h1>Know the risk.<br><span>Understand what happens next.</span></h1><p class="lede">Flight Rescue AI combines official National Weather Service forecasts, historical OGG operations, Hawaii storm events and machine learning to estimate disruption risk and compare how airlines performed in similar past conditions.</p><div class="hero-actions"><a class="primary-link" href="#analyze">Analyze my flight</a><a class="secondary-link" href="#history">Explore historical intelligence</a></div></div><div class="hero-logo"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt="Flight Rescue AI logo"><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt="Flight Rescue AI logo"></div></section>
   <section class="stats"><div><strong>330,615</strong><span>OGG flight records</span></div><div><strong>66,074</strong><span>weather observations</span></div><div><strong>2,613</strong><span>Hawaii storm records</span></div><div><strong>85</strong><span>historical episodes</span></div></section>
-
   <section id="analyze" class="workspace">
     <article class="panel form-panel">
-      <div class="section-title"><p class="eyebrow">Flight scenario</p><h2>Analyze disruption risk</h2><p>Enter your flight details. FlightRescue automatically retrieves the official NWS hourly forecast for Kahului Airport when the selected time is within the forecast window.</p></div>
+      <div class="section-title"><p class="eyebrow">Flight scenario</p><h2>Analyze disruption risk</h2><p>Tell us the flight. You do not need to know airport codes or enter weather measurements — FlightRescue retrieves the official NWS forecast for OGG automatically.</p></div>
       <form id="scenarioForm" class="form-grid">
-        <label>Airline<select id="airline" required><option value="HA">Hawaiian Airlines</option><option value="WN">Southwest Airlines</option><option value="UA">United Airlines</option><option value="AS">Alaska Airlines</option><option value="AA">American Airlines</option><option value="DL">Delta Air Lines</option></select></label>
-        <label>Direction<select id="direction"><option value="departure">Departing OGG</option><option value="arrival">Arriving OGG</option></select></label>
-        <label>Other airport<input id="otherAirport" value="HNL" minlength="3" maxlength="4" required placeholder="HNL"></label>
-        <label>Scheduled OGG-local time<input id="scheduledLocal" type="datetime-local" required></label>
-        <label>Weather scenario<select id="eventType"><option value="normal">Use NWS forecast / normal</option><option value="rain">What if: heavy rain</option><option value="wind">What if: high wind</option><option value="flood">What if: flash flood / flood</option><option value="tropical">What if: tropical storm / hurricane</option><option value="thunderstorm">What if: thunderstorm</option></select></label>
-        <label>Distance (miles)<input id="distance" type="number" min="0" placeholder="Optional"></label>
-        <div class="form-subtitle">Advanced weather overrides <span>optional — normally leave blank</span></div>
-        <label>Wind speed (mph)<input id="windSpeed" type="number" min="0" step="0.1" placeholder="Automatic from NWS"></label>
-        <label>Wind gust (mph)<input id="windGust" type="number" min="0" step="0.1" placeholder="Automatic / scenario"></label>
-        <label>Visibility (miles)<input id="visibility" type="number" min="0" step="0.1" placeholder="Automatic / model"></label>
-        <label>Precipitation (in)<input id="precipitation" type="number" min="0" step="0.01" placeholder="Automatic / scenario"></label>
-        <label>Temperature (°F)<input id="temperature" type="number" step="0.1" placeholder="Automatic from NWS"></label>
-        <label>Humidity (%)<input id="humidity" type="number" min="0" max="100" step="0.1" placeholder="Automatic from NWS"></label>
+        <label>Airline<select id="airline" required><option value="AA">American Airlines</option><option value="HA">Hawaiian Airlines</option><option value="WN">Southwest Airlines</option><option value="UA">United Airlines</option><option value="AS">Alaska Airlines</option><option value="DL">Delta Air Lines</option><option value="B6">JetBlue</option><option value="F9">Frontier Airlines</option><option value="NK">Spirit Airlines</option></select></label>
+        <label>Weather mode<select id="eventType"><option value="auto">Use official NWS forecast (recommended)</option><option value="rain">Stress test: heavy rain</option><option value="wind">Stress test: high wind</option><option value="flood">Stress test: flash flood / flood</option><option value="tropical">Stress test: tropical storm / hurricane</option><option value="thunderstorm">Stress test: thunderstorm</option></select></label>
+        <div class="route-grid">
+          <label>From airport<input id="fromAirport" list="airportOptions" autocomplete="off" required placeholder="Type Maui, Kahului, OGG, Los Angeles…"><span class="airport-hint">Search by airport code, airport name, city or state.</span></label>
+          <button id="swapAirports" class="swap-button" type="button" aria-label="Swap origin and destination">⇄</button>
+          <label>To airport<input id="toAirport" list="airportOptions" autocomplete="off" required placeholder="Type Honolulu, HNL, Seattle…"><span class="airport-hint">Suggestions narrow automatically as you type.</span></label>
+        </div>
+        <datalist id="airportOptions"></datalist>
+        <p id="routeHelp" class="help-text">Current research model supports flights arriving at or departing from Kahului Airport (OGG).</p>
+        <div class="date-time-grid">
+          <label><span id="dateLabel">Scheduled date at OGG</span><input id="flightDate" type="date" required><div class="quick-dates"><button type="button" class="quick-date" data-offset="0">Today</button><button type="button" class="quick-date" data-offset="1">Tomorrow</button><button type="button" class="quick-date" data-offset="2">+2 days</button></div></label>
+          <label><span id="timeLabel">Scheduled time at OGG</span><select id="flightTime" required></select><span class="timezone-note">Hawaii Standard Time (HST, UTC−10)</span></label>
+        </div>
+        <p class="scenario-note">The default mode uses official NWS forecast data as the weather input. Stress-test modes are transparent hypothetical overrides for exploring severe-weather scenarios.</p>
+        <div id="weatherPreview" class="weather-preview"><div class="weather-preview-top"><strong>Official NWS forecast for OGG</strong><span class="source-pill">NWS</span></div><p>Select a date and time to load the nearest Kahului Airport forecast.</p></div>
         <button id="analyzeButton" class="analyze-button" type="submit"><span>Analyze Risk</span><small>Run Flight Rescue AI</small></button>
       </form>
     </article>
-
     <article class="panel result-panel" aria-live="polite">
-      <div class="result-top"><div><p class="eyebrow">AI assessment</p><h2 id="riskLabel">Waiting for your scenario</h2><p id="resultMessage" class="muted">Complete the form and select Analyze Risk.</p></div><div id="riskRing" class="risk-ring">—</div></div>
-      <div class="result-grid"><div><small>Severe disruption</small><strong id="severeLabel">—</strong></div><div><small>Recovery estimate</small><strong id="recoveryLabel">—</strong></div><div><small>Model status</small><strong id="confidenceLabel">—</strong></div></div>
+      <div class="result-top"><div><p class="eyebrow">AI assessment</p><h2 id="riskLabel">Waiting for your flight</h2><p id="resultMessage" class="muted">Choose your route, date and time, then select Analyze Risk.</p></div><div id="riskRing" class="risk-ring">—</div></div>
+      <div class="result-grid"><div><small>Severe disruption</small><strong id="severeLabel">—</strong></div><div><small>Recovery estimate</small><strong id="recoveryLabel">—</strong></div><div><small>Model maturity</small><strong id="confidenceLabel">Experimental</strong></div></div>
       <div class="probability"><div><span>Disruption probability</span><strong id="probabilityText">—</strong></div><div class="bar"><i id="probabilityBar"></i></div></div>
-      <div id="weatherSource" class="notice">Official NWS weather will be retrieved when you analyze a flight.</div>
+      <div id="weatherSource" class="notice">Official NWS weather will be used automatically when available.</div>
+      <div id="analogSummary" class="analog-summary">Historical airline evidence will appear after analysis when comparable hazardous-weather events are available.</div>
       <div class="notice" style="margin-top:10px">Research decision-support prototype. Always confirm operational status with your airline and official airport/aviation sources.</div>
     </article>
   </section>
-
-  <section id="history" class="panel history-panel"><div class="history-head"><div><p class="eyebrow">Historical analog engine</p><h2>What happened in similar Hawaii weather events?</h2><p class="muted">Historical event context is shown separately from the model prediction to provide operational recovery context.</p></div><button id="historyButton" class="secondary-button" type="button">Load historical context</button></div><div id="historicalEvents" class="history-grid"><div class="empty-state">Select a weather scenario above, then load historical context.</div></div></section>
-
-  <section id="about" class="feature-grid"><article><span>01</span><h3>Flight risk</h3><p>Leakage-safe disruption models evaluated with time-based train, validation and test periods.</p></article><article><span>02</span><h3>Official weather</h3><p>Upcoming OGG weather is retrieved automatically from the National Weather Service API; manual weather fields are optional overrides.</p></article><article><span>03</span><h3>Recovery intelligence</h3><p>Historical episodes summarize cancellation, severe disruption and operational recovery behavior.</p></article><article><span>04</span><h3>Scenario testing</h3><p>Hazard selections create transparent what-if weather scenarios using the same meteorological variables the model was trained on.</p></article></section>
+  <section id="history" class="panel history-panel">
+    <div class="history-head"><div><p class="eyebrow">Historical analog engine</p><h2>How did airlines perform in similar OGG weather events?</h2><p class="muted">FlightRescue matches the NWS weather category to historical Maui/OGG NOAA events, then summarizes BTS delay and cancellation behavior for the selected airline and its peers.</p></div><button id="historyButton" class="secondary-button" type="button">Refresh historical evidence</button></div>
+    <div id="airlineComparison" class="comparison-wrap"><div class="empty-state">Run an analysis to compare airline performance in matched historical events.</div></div>
+    <div id="historicalEvents" class="history-grid"><div class="empty-state">Historical weather episodes will appear here after analysis.</div></div>
+  </section>
+  <section id="about" class="feature-grid"><article><span>01</span><h3>Official forecast first</h3><p>NWS forecast values at OGG are automatically converted into the meteorological inputs used by the trained model.</p></article><article><span>02</span><h3>Passenger-friendly route entry</h3><p>Search airports by code, full name, city or state; the model derives whether the flight is arriving at or departing from OGG.</p></article><article><span>03</span><h3>Airline behavior</h3><p>Historical event windows are summarized by airline using BTS delay, cancellation and severe-disruption outcomes.</p></article><article><span>04</span><h3>Transparent evidence</h3><p>Model risk and historical analog evidence are shown separately so the app does not disguise heuristic context as a trained probability.</p></article></section>
 </main>
-<footer><div class="footer-brand"><span class="footer-art"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt=""><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt=""></span><strong>Flight Rescue AI</strong></div><p>Research prototype for Kahului Airport (OGG) · NWS weather is used as an input source; this is not an official airline, FAA, NOAA, or airport advisory service.</p></footer>
+<footer><div class="footer-brand"><span class="footer-art"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt=""><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt=""></span><strong>Flight Rescue AI</strong></div><p>Research prototype for Kahului Airport (OGG) · NWS and BTS data are used as inputs; this is not an official airline, FAA, NOAA, or airport advisory service.</p></footer>
 <script src="config.js"></script><script src="app.js"></script>
 </body></html>
