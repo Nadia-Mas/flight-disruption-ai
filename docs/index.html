@@ -1,83 +1,69 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b1220" />
-  <title>FlightRescue AI</title>
+  <meta name="theme-color" content="#ffffff" />
+  <title>Flight Rescue AI · Hawaii disruption intelligence</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">FlightRescue AI</div>
-    <div class="badge">OGG research prototype</div>
-  </header>
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="Flight Rescue AI home"><img src="assets/flight-rescue-logo.png" alt="Flight Rescue AI"><span>FLIGHT RESCUE AI</span></a>
+  <nav><a href="#analyze">Analyze</a><a href="#history">History</a><a href="#about">About</a></nav>
+  <div class="header-actions"><span id="apiBadge" class="status-badge">Checking AI…</span><button id="themeToggle" class="icon-button" type="button" aria-label="Toggle light and dark mode">◐</button></div>
+</header>
 
-  <main class="shell">
-    <section class="hero">
-      <div>
-        <p class="eyebrow">Weather-aware flight disruption intelligence</p>
-        <h1>Understand disruption risk and what happened in similar Hawaii events.</h1>
-        <p class="lede">Built from OGG flight operations, Kahului weather observations, and NOAA Hawaii Storm Events. The public page is the product shell; trained Python inference is provided through the separate FlightRescue API.</p>
-      </div>
-      <div class="hero-card">
-        <div class="metric"><span>330,615</span><small>OGG flight records</small></div>
-        <div class="metric"><span>66,074</span><small>weather observations</small></div>
-        <div class="metric"><span>85</span><small>historical event episodes</small></div>
-      </div>
-    </section>
+<div class="airline-ribbon" aria-label="Airlines represented in OGG operations">
+  <div class="airline-track">
+    <span>HAWAIIAN AIRLINES</span><span>ALASKA AIRLINES</span><span>AMERICAN AIRLINES</span><span>DELTA</span><span>SOUTHWEST</span><span>UNITED</span><span>HAWAIIAN AIRLINES</span><span>ALASKA AIRLINES</span><span>AMERICAN AIRLINES</span><span>DELTA</span><span>SOUTHWEST</span><span>UNITED</span>
+  </div>
+</div>
 
-    <section class="grid two">
-      <article class="panel">
-        <h2>Scenario explorer</h2>
-        <p class="muted">This is the passenger-facing input design. Live prediction will activate when the deployed API and current-weather feature adapter are connected.</p>
-        <form id="scenarioForm" class="form-grid">
-          <label>Airport<input value="OGG — Kahului" disabled></label>
-          <label>Airline<select id="airline"><option>Hawaiian</option><option>Southwest</option><option>United</option><option>Alaska</option><option>American</option><option>Delta</option></select></label>
-          <label>Event type<select id="eventType"><option value="normal">Normal weather</option><option value="rain">Heavy rain</option><option value="wind">High wind</option><option value="flood">Flash flood / flood</option><option value="tropical">Tropical storm / hurricane</option></select></label>
-          <label>Wind / gust severity<select id="wind"><option value="0">Low</option><option value="1">Moderate</option><option value="2">High</option><option value="3">Extreme</option></select></label>
-          <label>Visibility<select id="visibility"><option value="0">Good</option><option value="1">Reduced</option><option value="2">Poor</option></select></label>
-          <label>Regional impact<select id="regional"><option value="0">Maui only / limited</option><option value="1">Several islands</option><option value="2">Statewide</option></select></label>
-          <button type="submit">Check connection</button>
-        </form>
-      </article>
+<main id="top" class="shell">
+  <section class="hero">
+    <div class="hero-copy"><p class="eyebrow">AI-powered disruption intelligence · Kahului, Maui</p><h1>Know the risk.<br><span>Understand what happens next.</span></h1><p class="lede">Flight Rescue AI combines historical OGG operations, local weather, Hawaii storm events and machine learning to estimate disruption risk and show what happened during similar events.</p><div class="hero-actions"><a class="primary-link" href="#analyze">Analyze my flight</a><a class="secondary-link" href="#history">Explore historical intelligence</a></div></div>
+    <div class="hero-logo"><img src="assets/flight-rescue-logo.png" alt="Flight Rescue AI airplane and neural cloud logo"></div>
+  </section>
 
-      <article class="panel result-panel">
-        <div class="result-head">
-          <div>
-            <p class="eyebrow">Inference status</p>
-            <h2 id="riskLabel">Checking model API…</h2>
-          </div>
-          <div id="riskRing" class="risk-ring">—</div>
-        </div>
-        <div class="result-grid">
-          <div><small>Severe disruption</small><strong id="severeLabel">—</strong></div>
-          <div><small>Historical recovery</small><strong id="recoveryLabel">—</strong></div>
-          <div><small>Confidence</small><strong id="confidenceLabel">—</strong></div>
-        </div>
-        <div class="notice">This page never substitutes a hand-written score for the trained model. If the inference API is unavailable, the UI reports that state explicitly.</div>
-      </article>
-    </section>
+  <section class="stats"><div><strong>330,615</strong><span>OGG flight records</span></div><div><strong>66,074</strong><span>weather observations</span></div><div><strong>2,613</strong><span>Hawaii storm records</span></div><div><strong>85</strong><span>historical episodes</span></div></section>
 
-    <section class="panel">
-      <h2>Historical intelligence already built</h2>
-      <div class="cards">
-        <div class="mini"><h3>Flight-level risk</h3><p>Binary disruption and severe-disruption models with temporal validation.</p></div>
-        <div class="mini"><h3>Event recovery</h3><p>BTS-derived operational recovery proxy after recorded Hawaii weather episodes.</p></div>
-        <div class="mini"><h3>Historical analogs</h3><p>Similarity retrieval based on event/weather context, with outcomes shown only after matching.</p></div>
-        <div class="mini"><h3>API layer</h3><p>FastAPI source is now packaged in the repository for artifact-backed inference and historical retrieval.</p></div>
-      </div>
-    </section>
+  <section id="analyze" class="workspace">
+    <article class="panel form-panel">
+      <div class="section-title"><p class="eyebrow">Flight scenario</p><h2>Analyze disruption risk</h2><p>Enter the flight and weather conditions you know. Optional weather fields can be left blank.</p></div>
+      <form id="scenarioForm" class="form-grid">
+        <label>Airline<select id="airline" required><option value="HA">Hawaiian Airlines</option><option value="WN">Southwest Airlines</option><option value="UA">United Airlines</option><option value="AS">Alaska Airlines</option><option value="AA">American Airlines</option><option value="DL">Delta Air Lines</option></select></label>
+        <label>Direction<select id="direction"><option value="departure">Departing OGG</option><option value="arrival">Arriving OGG</option></select></label>
+        <label>Other airport<input id="otherAirport" value="HNL" minlength="3" maxlength="4" required placeholder="HNL"></label>
+        <label>Scheduled OGG-local time<input id="scheduledLocal" type="datetime-local" required></label>
+        <label>Weather event<select id="eventType"><option value="normal">Normal / no major event</option><option value="rain">Heavy rain</option><option value="wind">High wind</option><option value="flood">Flash flood / flood</option><option value="tropical">Tropical storm / hurricane</option><option value="thunderstorm">Thunderstorm</option></select></label>
+        <label>Distance (miles)<input id="distance" type="number" min="0" placeholder="Optional"></label>
+        <div class="form-subtitle">Weather measurements <span>optional</span></div>
+        <label>Wind speed (mph)<input id="windSpeed" type="number" min="0" step="0.1" placeholder="e.g. 25"></label>
+        <label>Wind gust (mph)<input id="windGust" type="number" min="0" step="0.1" placeholder="e.g. 40"></label>
+        <label>Visibility (miles)<input id="visibility" type="number" min="0" step="0.1" placeholder="e.g. 5"></label>
+        <label>Precipitation (in)<input id="precipitation" type="number" min="0" step="0.01" placeholder="e.g. 0.5"></label>
+        <label>Temperature (°F)<input id="temperature" type="number" step="0.1" placeholder="Optional"></label>
+        <label>Humidity (%)<input id="humidity" type="number" min="0" max="100" step="0.1" placeholder="Optional"></label>
+        <button id="analyzeButton" class="analyze-button" type="submit"><span>Analyze Risk</span><small>Run Flight Rescue AI</small></button>
+      </form>
+    </article>
 
-    <section class="panel example">
-      <h2>Example historical episode</h2>
-      <p><strong>Jan 30, 2025 — Flash Flood / Flood / High Wind</strong></p>
-      <p class="muted">In the research notebook, this episode showed roughly 27% cancellations and 42% severe disruption, with an observed operational recovery proxy of about 39 hours. It is a useful example of why extreme events need a confidence/severity layer in addition to nearest-neighbor matching.</p>
-    </section>
-  </main>
+    <article class="panel result-panel" aria-live="polite">
+      <div class="result-top"><div><p class="eyebrow">AI assessment</p><h2 id="riskLabel">Waiting for your scenario</h2><p id="resultMessage" class="muted">Complete the form and select Analyze Risk.</p></div><div id="riskRing" class="risk-ring">—</div></div>
+      <div class="result-grid"><div><small>Severe disruption</small><strong id="severeLabel">—</strong></div><div><small>Recovery estimate</small><strong id="recoveryLabel">—</strong></div><div><small>Confidence</small><strong id="confidenceLabel">—</strong></div></div>
+      <div class="probability"><div><span>Disruption probability</span><strong id="probabilityText">—</strong></div><div class="bar"><i id="probabilityBar"></i></div></div>
+      <div class="notice">Research decision-support prototype. Always confirm operational status with your airline and official airport/aviation sources.</div>
+    </article>
+  </section>
 
-  <footer>FlightRescue AI · Research prototype for Kahului Airport (OGG) · Not an official airline, FAA, or airport advisory service.</footer>
-  <script src="config.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
+  <section id="history" class="panel history-panel">
+    <div class="history-head"><div><p class="eyebrow">Historical analog engine</p><h2>What happened in similar Hawaii weather events?</h2><p class="muted">The API retrieves historical event context separately from the model prediction, helping explain possible operational recovery.</p></div><button id="historyButton" class="secondary-button" type="button">Load historical context</button></div>
+    <div id="historicalEvents" class="history-grid"><div class="empty-state">Select a weather event above, then load historical context.</div></div>
+  </section>
+
+  <section id="about" class="feature-grid"><article><span>01</span><h3>Flight risk</h3><p>Leakage-safe disruption models evaluated with time-based train, validation and test periods.</p></article><article><span>02</span><h3>Weather context</h3><p>Kahului observations are joined with Hawaii NOAA Storm Events to represent hazardous conditions.</p></article><article><span>03</span><h3>Recovery intelligence</h3><p>Historical episodes summarize cancellation, severe disruption and operational recovery behavior.</p></article><article><span>04</span><h3>Explainable retrieval</h3><p>Similar events are retrieved from weather/event context; outcomes are revealed after matching.</p></article></section>
+</main>
+<footer><div class="footer-brand"><img src="assets/flight-rescue-logo.png" alt=""><strong>Flight Rescue AI</strong></div><p>Research prototype for Kahului Airport (OGG) · Not an official airline, FAA, NOAA, or airport advisory service.</p></footer>
+<script src="config.js"></script><script src="app.js"></script>
+</body></html>
