@@ -23,32 +23,14 @@
   <div class="header-actions"><span id="apiBadge" class="status-badge">Checking AI…</span><button id="themeToggle" class="icon-button" type="button" aria-label="Toggle light and dark mode">◐</button></div>
 </header>
 
-<div class="airline-ribbon" aria-label="Airlines represented in OGG operations">
-  <div class="airline-track">
-    <span class="airline-logo aa"><i>◆</i><b>American</b><small>Airlines</small></span>
-    <span class="airline-logo delta"><i>▲</i><b>DELTA</b></span>
-    <span class="airline-logo united"><i>▦</i><b>UNITED</b></span>
-    <span class="airline-logo southwest"><b>Southwest</b><i>♥</i></span>
-    <span class="airline-logo alaska"><b>Alaska</b><small>AIRLINES</small></span>
-    <span class="airline-logo jetblue"><b>jetBlue</b></span>
-    <span class="airline-logo spirit"><b>spirit</b></span>
-    <span class="airline-logo hawaiian"><i>✿</i><b>HAWAIIAN</b><small>AIRLINES</small></span>
-    <span class="airline-logo frontier"><b>FRONTIER</b><small>AIRLINES</small></span>
-    <span class="airline-logo aa"><i>◆</i><b>American</b><small>Airlines</small></span>
-    <span class="airline-logo delta"><i>▲</i><b>DELTA</b></span>
-    <span class="airline-logo united"><i>▦</i><b>UNITED</b></span>
-    <span class="airline-logo southwest"><b>Southwest</b><i>♥</i></span>
-    <span class="airline-logo alaska"><b>Alaska</b><small>AIRLINES</small></span>
-    <span class="airline-logo jetblue"><b>jetBlue</b></span>
-    <span class="airline-logo spirit"><b>spirit</b></span>
-    <span class="airline-logo hawaiian"><i>✿</i><b>HAWAIIAN</b><small>AIRLINES</small></span>
-    <span class="airline-logo frontier"><b>FRONTIER</b><small>AIRLINES</small></span>
-  </div>
-</div>
+<div class="airline-ribbon" aria-label="Airlines represented in OGG operations"><div class="airline-track">
+  <span class="airline-logo aa"><i>◆</i><b>American</b><small>Airlines</small></span><span class="airline-logo delta"><i>▲</i><b>DELTA</b></span><span class="airline-logo united"><i>▦</i><b>UNITED</b></span><span class="airline-logo southwest"><b>Southwest</b><i>♥</i></span><span class="airline-logo alaska"><b>Alaska</b><small>AIRLINES</small></span><span class="airline-logo jetblue"><b>jetBlue</b></span><span class="airline-logo spirit"><b>spirit</b></span><span class="airline-logo hawaiian"><i>✿</i><b>HAWAIIAN</b><small>AIRLINES</small></span><span class="airline-logo frontier"><b>FRONTIER</b><small>AIRLINES</small></span>
+  <span class="airline-logo aa"><i>◆</i><b>American</b><small>Airlines</small></span><span class="airline-logo delta"><i>▲</i><b>DELTA</b></span><span class="airline-logo united"><i>▦</i><b>UNITED</b></span><span class="airline-logo southwest"><b>Southwest</b><i>♥</i></span><span class="airline-logo alaska"><b>Alaska</b><small>AIRLINES</small></span><span class="airline-logo jetblue"><b>jetBlue</b></span><span class="airline-logo spirit"><b>spirit</b></span><span class="airline-logo hawaiian"><i>✿</i><b>HAWAIIAN</b><small>AIRLINES</small></span><span class="airline-logo frontier"><b>FRONTIER</b><small>AIRLINES</small></span>
+</div></div>
 
 <main id="top" class="shell">
   <section class="hero">
-    <div class="hero-copy"><p class="eyebrow">AI-powered disruption intelligence · Kahului, Maui</p><h1>Know the risk.<br><span>Understand what happens next.</span></h1><p class="lede">Flight Rescue AI combines historical OGG operations, local weather, Hawaii storm events and machine learning to estimate disruption risk and show what happened during similar events.</p><div class="hero-actions"><a class="primary-link" href="#analyze">Analyze my flight</a><a class="secondary-link" href="#history">Explore historical intelligence</a></div></div>
+    <div class="hero-copy"><p class="eyebrow">AI-powered disruption intelligence · Kahului, Maui</p><h1>Know the risk.<br><span>Understand what happens next.</span></h1><p class="lede">Flight Rescue AI combines historical OGG operations, official National Weather Service forecasts, Hawaii storm events and machine learning to estimate disruption risk and show what happened during similar events.</p><div class="hero-actions"><a class="primary-link" href="#analyze">Analyze my flight</a><a class="secondary-link" href="#history">Explore historical intelligence</a></div></div>
     <div class="hero-logo"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt="Flight Rescue AI logo"><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt="Flight Rescue AI logo"></div>
   </section>
 
@@ -56,40 +38,38 @@
 
   <section id="analyze" class="workspace">
     <article class="panel form-panel">
-      <div class="section-title"><p class="eyebrow">Flight scenario</p><h2>Analyze disruption risk</h2><p>Enter the flight and weather conditions you know. Optional weather fields can be left blank.</p></div>
+      <div class="section-title"><p class="eyebrow">Flight scenario</p><h2>Analyze disruption risk</h2><p>Enter your flight details. FlightRescue automatically retrieves the official NWS hourly forecast for Kahului Airport when the selected time is within the forecast window.</p></div>
       <form id="scenarioForm" class="form-grid">
         <label>Airline<select id="airline" required><option value="HA">Hawaiian Airlines</option><option value="WN">Southwest Airlines</option><option value="UA">United Airlines</option><option value="AS">Alaska Airlines</option><option value="AA">American Airlines</option><option value="DL">Delta Air Lines</option></select></label>
         <label>Direction<select id="direction"><option value="departure">Departing OGG</option><option value="arrival">Arriving OGG</option></select></label>
         <label>Other airport<input id="otherAirport" value="HNL" minlength="3" maxlength="4" required placeholder="HNL"></label>
         <label>Scheduled OGG-local time<input id="scheduledLocal" type="datetime-local" required></label>
-        <label>Weather event<select id="eventType"><option value="normal">Normal / no major event</option><option value="rain">Heavy rain</option><option value="wind">High wind</option><option value="flood">Flash flood / flood</option><option value="tropical">Tropical storm / hurricane</option><option value="thunderstorm">Thunderstorm</option></select></label>
+        <label>Weather scenario<select id="eventType"><option value="normal">Use NWS forecast / normal</option><option value="rain">What if: heavy rain</option><option value="wind">What if: high wind</option><option value="flood">What if: flash flood / flood</option><option value="tropical">What if: tropical storm / hurricane</option><option value="thunderstorm">What if: thunderstorm</option></select></label>
         <label>Distance (miles)<input id="distance" type="number" min="0" placeholder="Optional"></label>
-        <div class="form-subtitle">Weather measurements <span>optional</span></div>
-        <label>Wind speed (mph)<input id="windSpeed" type="number" min="0" step="0.1" placeholder="e.g. 25"></label>
-        <label>Wind gust (mph)<input id="windGust" type="number" min="0" step="0.1" placeholder="e.g. 40"></label>
-        <label>Visibility (miles)<input id="visibility" type="number" min="0" step="0.1" placeholder="e.g. 5"></label>
-        <label>Precipitation (in)<input id="precipitation" type="number" min="0" step="0.01" placeholder="e.g. 0.5"></label>
-        <label>Temperature (°F)<input id="temperature" type="number" step="0.1" placeholder="Optional"></label>
-        <label>Humidity (%)<input id="humidity" type="number" min="0" max="100" step="0.1" placeholder="Optional"></label>
+        <div class="form-subtitle">Advanced weather overrides <span>optional — normally leave blank</span></div>
+        <label>Wind speed (mph)<input id="windSpeed" type="number" min="0" step="0.1" placeholder="Automatic from NWS"></label>
+        <label>Wind gust (mph)<input id="windGust" type="number" min="0" step="0.1" placeholder="Automatic / scenario"></label>
+        <label>Visibility (miles)<input id="visibility" type="number" min="0" step="0.1" placeholder="Automatic / model"></label>
+        <label>Precipitation (in)<input id="precipitation" type="number" min="0" step="0.01" placeholder="Automatic / scenario"></label>
+        <label>Temperature (°F)<input id="temperature" type="number" step="0.1" placeholder="Automatic from NWS"></label>
+        <label>Humidity (%)<input id="humidity" type="number" min="0" max="100" step="0.1" placeholder="Automatic from NWS"></label>
         <button id="analyzeButton" class="analyze-button" type="submit"><span>Analyze Risk</span><small>Run Flight Rescue AI</small></button>
       </form>
     </article>
 
     <article class="panel result-panel" aria-live="polite">
       <div class="result-top"><div><p class="eyebrow">AI assessment</p><h2 id="riskLabel">Waiting for your scenario</h2><p id="resultMessage" class="muted">Complete the form and select Analyze Risk.</p></div><div id="riskRing" class="risk-ring">—</div></div>
-      <div class="result-grid"><div><small>Severe disruption</small><strong id="severeLabel">—</strong></div><div><small>Recovery estimate</small><strong id="recoveryLabel">—</strong></div><div><small>Confidence</small><strong id="confidenceLabel">—</strong></div></div>
+      <div class="result-grid"><div><small>Severe disruption</small><strong id="severeLabel">—</strong></div><div><small>Recovery estimate</small><strong id="recoveryLabel">—</strong></div><div><small>Model status</small><strong id="confidenceLabel">—</strong></div></div>
       <div class="probability"><div><span>Disruption probability</span><strong id="probabilityText">—</strong></div><div class="bar"><i id="probabilityBar"></i></div></div>
-      <div class="notice">Research decision-support prototype. Always confirm operational status with your airline and official airport/aviation sources.</div>
+      <div id="weatherSource" class="notice">Official NWS weather will be retrieved when you analyze a flight.</div>
+      <div class="notice" style="margin-top:10px">Research decision-support prototype. Always confirm operational status with your airline and official airport/aviation sources.</div>
     </article>
   </section>
 
-  <section id="history" class="panel history-panel">
-    <div class="history-head"><div><p class="eyebrow">Historical analog engine</p><h2>What happened in similar Hawaii weather events?</h2><p class="muted">The API retrieves historical event context separately from the model prediction, helping explain possible operational recovery.</p></div><button id="historyButton" class="secondary-button" type="button">Load historical context</button></div>
-    <div id="historicalEvents" class="history-grid"><div class="empty-state">Select a weather event above, then load historical context.</div></div>
-  </section>
+  <section id="history" class="panel history-panel"><div class="history-head"><div><p class="eyebrow">Historical analog engine</p><h2>What happened in similar Hawaii weather events?</h2><p class="muted">Historical event context is shown separately from the model prediction to provide operational recovery context.</p></div><button id="historyButton" class="secondary-button" type="button">Load historical context</button></div><div id="historicalEvents" class="history-grid"><div class="empty-state">Select a weather scenario above, then load historical context.</div></div></section>
 
-  <section id="about" class="feature-grid"><article><span>01</span><h3>Flight risk</h3><p>Leakage-safe disruption models evaluated with time-based train, validation and test periods.</p></article><article><span>02</span><h3>Weather context</h3><p>Kahului observations are joined with Hawaii NOAA Storm Events to represent hazardous conditions.</p></article><article><span>03</span><h3>Recovery intelligence</h3><p>Historical episodes summarize cancellation, severe disruption and operational recovery behavior.</p></article><article><span>04</span><h3>Explainable retrieval</h3><p>Similar events are retrieved from weather/event context; outcomes are revealed after matching.</p></article></section>
+  <section id="about" class="feature-grid"><article><span>01</span><h3>Flight risk</h3><p>Leakage-safe disruption models evaluated with time-based train, validation and test periods.</p></article><article><span>02</span><h3>Official weather</h3><p>Upcoming OGG weather is retrieved automatically from the National Weather Service API; manual weather fields are optional overrides.</p></article><article><span>03</span><h3>Recovery intelligence</h3><p>Historical episodes summarize cancellation, severe disruption and operational recovery behavior.</p></article><article><span>04</span><h3>Scenario testing</h3><p>Hazard selections create transparent what-if weather scenarios using the same meteorological variables the model was trained on.</p></article></section>
 </main>
-<footer><div class="footer-brand"><span class="footer-art"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt=""><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt=""></span><strong>Flight Rescue AI</strong></div><p>Research prototype for Kahului Airport (OGG) · Not an official airline, FAA, NOAA, or airport advisory service.</p></footer>
+<footer><div class="footer-brand"><span class="footer-art"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt=""><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt=""></span><strong>Flight Rescue AI</strong></div><p>Research prototype for Kahului Airport (OGG) · NWS weather is used as an input source; this is not an official airline, FAA, NOAA, or airport advisory service.</p></footer>
 <script src="config.js"></script><script src="app.js"></script>
 </body></html>
