@@ -8,20 +8,9 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
-  <symbol id="flightRescueMark" viewBox="0 0 180 120">
-    <g class="logo-cloud">
-      <circle cx="52" cy="64" r="30"/><circle cx="82" cy="45" r="36"/><circle cx="118" cy="58" r="30"/><circle cx="139" cy="72" r="25"/><rect x="43" y="58" width="97" height="39" rx="18"/>
-    </g>
-    <path class="logo-circuit" d="M55 49h20l9 9h18M95 31v17l9 8h17M113 72h15l8-8h12" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path class="logo-plane" d="M26 75l43-13 41-28 7 2-27 30 55-13 8 5-59 25-17 24-8-1 7-19-25 10-7-4 11-11-29-1z"/>
-    <path class="logo-plane-detail" d="M69 68l21-7M79 84l22-10" fill="none" stroke-width="2.6" stroke-linecap="round"/>
-  </symbol>
-</svg>
-
 <header class="topbar">
   <a class="brand" href="#top" aria-label="Flight Rescue AI home">
-    <svg class="brand-mark" viewBox="0 0 180 120" aria-hidden="true"><use href="#flightRescueMark"/></svg>
+    <span class="brand-art"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt="Flight Rescue AI"><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt="Flight Rescue AI"></span>
     <span>FLIGHT RESCUE AI</span>
   </a>
   <nav><a href="#analyze">Analyze</a><a href="#history">History</a><a href="#about">About</a></nav>
@@ -54,7 +43,7 @@
 <main id="top" class="shell">
   <section class="hero">
     <div class="hero-copy"><p class="eyebrow">AI-powered disruption intelligence · Kahului, Maui</p><h1>Know the risk.<br><span>Understand what happens next.</span></h1><p class="lede">Flight Rescue AI combines historical OGG operations, local weather, Hawaii storm events and machine learning to estimate disruption risk and show what happened during similar events.</p><div class="hero-actions"><a class="primary-link" href="#analyze">Analyze my flight</a><a class="secondary-link" href="#history">Explore historical intelligence</a></div></div>
-    <div class="hero-logo"><svg class="hero-mark" viewBox="0 0 180 120" role="img" aria-label="Flight Rescue AI airplane and neural cloud logo"><use href="#flightRescueMark"/></svg></div>
+    <div class="hero-logo"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt="Flight Rescue AI logo"><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt="Flight Rescue AI logo"></div>
   </section>
 
   <section class="stats"><div><strong>330,615</strong><span>OGG flight records</span></div><div><strong>66,074</strong><span>weather observations</span></div><div><strong>2,613</strong><span>Hawaii storm records</span></div><div><strong>85</strong><span>historical episodes</span></div></section>
@@ -95,6 +84,6 @@
 
   <section id="about" class="feature-grid"><article><span>01</span><h3>Flight risk</h3><p>Leakage-safe disruption models evaluated with time-based train, validation and test periods.</p></article><article><span>02</span><h3>Weather context</h3><p>Kahului observations are joined with Hawaii NOAA Storm Events to represent hazardous conditions.</p></article><article><span>03</span><h3>Recovery intelligence</h3><p>Historical episodes summarize cancellation, severe disruption and operational recovery behavior.</p></article><article><span>04</span><h3>Explainable retrieval</h3><p>Similar events are retrieved from weather/event context; outcomes are revealed after matching.</p></article></section>
 </main>
-<footer><div class="footer-brand"><svg class="footer-mark" viewBox="0 0 180 120" aria-hidden="true"><use href="#flightRescueMark"/></svg><strong>Flight Rescue AI</strong></div><p>Research prototype for Kahului Airport (OGG) · Not an official airline, FAA, NOAA, or airport advisory service.</p></footer>
+<footer><div class="footer-brand"><span class="footer-art"><img class="logo-light" src="assets/flight-rescue-logo-light.webp" alt=""><img class="logo-dark" src="assets/flight-rescue-logo-dark.webp" alt=""></span><strong>Flight Rescue AI</strong></div><p>Research prototype for Kahului Airport (OGG) · Not an official airline, FAA, NOAA, or airport advisory service.</p></footer>
 <script src="config.js"></script><script src="app.js"></script>
 </body></html>
