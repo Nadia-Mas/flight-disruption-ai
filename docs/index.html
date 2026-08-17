@@ -11,14 +11,20 @@
     .brand-art{width:54px;height:54px;overflow:hidden;border-radius:12px;display:block;flex:0 0 54px}.brand-art img{width:100%;height:100%;object-fit:cover;display:block}
     .hero-logo img{width:min(430px,100%);border-radius:24px;box-shadow:0 24px 55px rgba(10,71,116,.12)}
     .footer-art{width:38px;height:38px;overflow:hidden;border-radius:9px;display:block}.footer-art img{width:100%;height:100%;object-fit:cover}
-    .full-row{grid-column:1/-1}.route-grid{grid-column:1/-1;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end}.swap-button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:var(--text);cursor:pointer;margin-bottom:1px;font-size:18px}
+    .full-row{grid-column:1/-1}
+    .form-grid>label,.route-grid>label,.date-time-grid>label{min-width:0;width:100%}
+    .form-grid input,.form-grid select{height:44px;min-height:44px;width:100%;padding:0 12px;line-height:44px}
+    .route-grid{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) 46px minmax(0,1fr);gap:12px;align-items:start}
+    .route-grid>label{display:block}
+    .route-grid input{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .swap-button{width:46px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:var(--text);cursor:pointer;margin-top:25px;font-size:18px;display:grid;place-items:center;padding:0;align-self:start}
     .help-text{grid-column:1/-1;margin:-5px 0 2px;font-size:11px;color:var(--muted);line-height:1.45}.help-text.error{color:var(--danger);font-weight:700}
-    .date-time-grid{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:15px}.quick-dates{display:flex;gap:6px;margin-top:7px}.quick-date{border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:5px 9px;border-radius:999px;font-size:10px;cursor:pointer}.timezone-note{display:block;margin-top:6px;font-size:10px;font-weight:500;color:var(--muted)}
+    .date-time-grid{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:15px;align-items:start}.quick-dates{display:flex;gap:6px;margin-top:7px}.quick-date{border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:5px 9px;border-radius:999px;font-size:10px;cursor:pointer}.timezone-note{display:block;margin-top:6px;font-size:10px;font-weight:500;color:var(--muted)}
     .weather-preview{grid-column:1/-1;border:1px solid color-mix(in srgb,var(--brand2) 25%,var(--line));background:color-mix(in srgb,var(--brand2) 5%,var(--surface2));padding:14px;border-radius:13px}.weather-preview-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.weather-preview strong{font-size:13px}.weather-preview p{font-size:11px;color:var(--muted);margin:7px 0 0;line-height:1.55}.source-pill{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--success);border:1px solid color-mix(in srgb,var(--success) 30%,var(--line));border-radius:999px;padding:5px 7px;white-space:nowrap}
     .scenario-note{grid-column:1/-1;font-size:10px;color:var(--muted);margin-top:-7px;line-height:1.45}.analog-summary{margin-top:10px;font-size:11px;line-height:1.55;color:var(--muted);padding:11px 13px;border-radius:9px;background:var(--surface2)}
     .comparison-wrap{margin-top:22px;overflow:auto}.comparison-wrap h3{font-size:17px;margin:0 0 6px}.comparison-wrap>p{font-size:11px;color:var(--muted);margin:0 0 12px}.comparison-table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}.comparison-table th,.comparison-table td{padding:10px 9px;border-bottom:1px solid var(--line);text-align:right}.comparison-table th:first-child,.comparison-table td:first-child{text-align:left}.comparison-table th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}.comparison-table tr.selected-airline{background:color-mix(in srgb,var(--brand2) 8%,transparent)}.comparison-table tr.selected-airline td:first-child{font-weight:850;color:var(--brand2)}
-    .airport-hint{font-size:10px;color:var(--muted);display:block;margin-top:5px;font-weight:500}
-    @media(max-width:600px){.route-grid{grid-template-columns:1fr}.swap-button{width:100%;height:36px}.date-time-grid{grid-template-columns:1fr}.comparison-wrap{margin-left:-5px;margin-right:-5px}}
+    .airport-hint{font-size:10px;color:var(--muted);display:block;margin-top:5px;font-weight:500;line-height:1.35}
+    @media(max-width:600px){.route-grid{grid-template-columns:1fr;gap:10px}.swap-button{width:100%;height:36px;margin-top:0}.date-time-grid{grid-template-columns:1fr}.comparison-wrap{margin-left:-5px;margin-right:-5px}}
   </style>
 </head>
 <body>
