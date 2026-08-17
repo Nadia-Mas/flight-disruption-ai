@@ -1,0 +1,24 @@
+name: FlightRescue production smoke tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/smoke_test_production.py'
+      - '.github/workflows/production-smoke.yml'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install smoke-test dependency
+        run: pip install requests
+      - name: Run production API/NWS scenario smoke tests
+        run: python scripts/smoke_test_production.py
