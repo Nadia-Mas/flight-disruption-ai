@@ -1,35 +1,66 @@
-# Flight Disruption AI
+# FlightRescue AI — Flight Disruption Intelligence
 
-An AI-driven platform for understanding and predicting weather-related flight disruptions and operational recovery.
+FlightRescue AI is a research-driven passenger-facing platform for predicting flight disruption risk at **Kahului Airport (OGG), Maui, Hawaii**. It combines trained machine-learning models, official weather information, historical flight operations, and historical severe-weather analogs to help travelers understand disruption risk and how airlines have behaved under similar conditions.
 
-## Core idea
+## What FlightRescue does
 
-Given an airport, airline, route, departure time, and current weather event, the system will estimate:
+Given an airline, origin, destination, and scheduled flight time, FlightRescue can provide:
 
-- probability of normal operation, severe delay, or cancellation;
-- likely operational recovery time;
-- historically similar weather/airport incidents;
-- interpretable factors driving the prediction.
+- probability of any flight disruption;
+- probability of severe disruption;
+- official weather context for OGG;
+- historically similar Hawaii weather/airport events;
+- operational recovery context;
+- airline-specific historical performance during matched events, including delay and cancellation behavior when the airline-event aggregate is available;
+- comparison with other airlines operating at OGG under similar historical conditions.
 
 ## First case study
 
 **Kahului Airport (OGG), Maui, Hawaii**
 
-The initial research phase integrates historical flight operations with airport weather observations and severe-weather event records, then uses those aligned data sources to develop disruption-prediction and recovery models.
+The current trained models are OGG-specific. The passenger interface accepts friendly origin and destination searches using airport code, airport name, or city, but the current research model requires OGG to be either the departure or arrival airport.
 
-## Web prototype
+## Live application
 
-A GitHub Pages-compatible FlightRescue AI prototype now lives in `docs/`.
-
-The public UI is designed as a research/product prototype and currently provides a scenario explorer plus project findings. Live trained-model probabilities will be connected through the future inference API; the static page intentionally does not present its illustrative scenario score as a real-time operational prediction.
-
-Expected Pages URL after Pages is enabled for the repository:
+The passenger-facing FlightRescue interface is deployed with GitHub Pages:
 
 `https://nadia-mas.github.io/flight-disruption-ai/`
 
+The production FastAPI inference service is deployed separately on Vercel. The web interface calls this API for live model inference and weather-aware scenario analysis.
+
+## Weather intelligence
+
+FlightRescue automatically retrieves official **National Weather Service (NWS)** forecast information for Kahului/OGG for the requested flight time when that forecast is available. Passengers therefore do not need to manually enter technical weather measurements.
+
+The NWS conditions are converted into meteorological variables used by the trained inference pipeline, including temperature, humidity, wind, gusts, precipitation, and related weather context. Optional hazard presets in the interface are intended for hypothetical stress testing rather than as replacements for official observed/forecast weather.
+
+## Historical airline evidence
+
+FlightRescue combines weather similarity with historical OGG flight operations. A reproducible aggregation pipeline builds airline-level performance for historical NOAA event windows so matched historical events can be summarized using metrics such as:
+
+- number of flights observed;
+- percentage delayed by at least 15 minutes;
+- cancellation percentage;
+- severe-disruption percentage;
+- mean delay time;
+- comparison between the selected airline and other airlines operating at OGG.
+
+These historical statistics are evidence from prior operations and are displayed separately from the machine-learning probability rather than being presented as guaranteed future outcomes.
+
+## API usage and permission
+
+The FlightRescue API is provided for **research, demonstration, and evaluation purposes**. Third-party use of the FlightRescue API — including integration into another application or website, automated access, redistribution, commercial use, or use of the API as part of another service — requires **prior permission from the project owner**.
+
+To request permission to use or integrate the API, contact:
+
+**Fatemeh (Nadia) Masoumi**  
+**Email:** Fatemeh.masoumi.1994@gmail.com
+
+Public availability of an API endpoint should not be interpreted as permission for unrestricted third-party use.
+
 ## Research notebook pipeline
 
-The notebook research phase now consists of nine stages:
+The research pipeline consists of nine stages:
 
 1. `01_ogg_data_exploration.ipynb` — source loading and initial OGG exploration.
 2. `02_ogg_phase1_eda.ipynb` — Phase 1 exploratory data analysis.
@@ -41,35 +72,32 @@ The notebook research phase now consists of nine stages:
 8. `08_historical_similar_event_retrieval.ipynb` — historical analog retrieval and recovery evidence.
 9. `09_flightrescue_inference_pipeline.ipynb` — integration layer for passenger-facing inference.
 
-## Phase 1 data coverage
+## Data coverage
 
 ### BTS flight operations
 
 - Airport focus: **OGG (Kahului Airport)**
-- Date range available in the current download: **January 2020 through June 2026**
-- July–December 2026 were not yet available from BTS at download time and were skipped.
-- Total OGG flight records downloaded: **330,615**
-- Local file: `data/raw/bts/ogg_flights_2020_2026.csv.gz`
+- Current source download coverage: **January 2020 through June 2026**
+- Total OGG flight records in the Phase 1 download: **330,615**
+- Raw data are downloaded/generated artifacts and are not intended to be stored permanently in Git history.
 
 ### NOAA Local Climatological Data (LCD)
 
 - Weather station: **Kahului Airport, Maui**
-- Date range successfully downloaded: **2020 through 2025**
-- Total weather observations downloaded: **66,074**
-- Local file: `data/raw/weather/ogg_lcd_2020_2026.csv.gz`
+- Historical coverage used in the research pipeline: **2020 through 2025**
+- Historical weather observations in the Phase 1 download: **66,074**
 
 ### NOAA Storm Events
 
 - Geographic scope: **State of Hawaii**
-- Date range downloaded: **2020 through 2026**
-- Total Hawaii storm-event records retained: **2,613**
-- Local file: `data/raw/incidents/hawaii_storm_events_2020_2026.csv.gz`
+- Historical source coverage: **2020 through 2026**
+- Hawaii storm-event records retained in the Phase 1 download: **2,613**
 
-LCD provides measured airport conditions around OGG at a particular time, while Storm Events provides broader recorded hazardous-weather context, including event type, start/end time, geography, magnitude when available, impacts, source, identifiers, and narrative descriptions.
+LCD provides measured airport conditions around OGG at a particular time, while Storm Events provides broader hazardous-weather context, including event type, timing, geography, magnitude when available, impacts, source identifiers, and narrative descriptions.
 
-## Phase 1 dataset alignment
+## Dataset alignment
 
-The initial unit of analysis is **one scheduled flight touching OGG**:
+The primary flight-level unit of analysis is one scheduled flight touching OGG:
 
 ```text
 OGG flight at time t
@@ -81,49 +109,53 @@ Hawaii severe-weather event context around time t
 model-ready flight-disruption observation
 ```
 
-The project then adds a second event-centric representation for historical weather episodes, airport disruption, airline behavior, and operational recovery.
+For passenger-facing inference, the architecture extends this to:
 
-## Current raw-data summary
-
-| Data source | Coverage | Records |
-|---|---:|---:|
-| BTS OGG flight operations | Jan 2020 – Jun 2026 | 330,615 flights |
-| NOAA OGG LCD weather | 2020 – 2025 | 66,074 observations |
-| NOAA Hawaii Storm Events | 2020 – 2026 | 2,613 events |
-
-Raw downloaded datasets are intentionally excluded from Git history because they are generated/downloaded artifacts and can be large. They are recreated with the scripts in `scripts/`.
+```text
+Passenger flight details
+        ↓
+Official NWS forecast at OGG
+        ↓
+Weather-aware ML inference
+        +
+Historical NOAA event similarity
+        +
+BTS airline performance during matched events
+        ↓
+FlightRescue risk + historical airline evidence
+```
 
 ## Modeling components
 
-1. **Flight Disruption Predictor** — flight-level risk estimation.
-2. **Severe Disruption Predictor** — cancellation/severe-delay risk estimation.
-3. **Recovery Intelligence** — BTS-derived operational recovery after event episodes.
-4. **Historical Analogue Retrieval** — similar prior Hawaii weather/airport incidents.
-5. **Inference Layer** — combines risk probabilities, historical evidence, recovery range, severity, and confidence.
-6. **Web Interface** — GitHub Pages-compatible passenger-facing prototype.
+1. **Flight Disruption Predictor** — flight-level probability of any disruption.
+2. **Severe Disruption Predictor** — severe-delay/cancellation risk estimation.
+3. **NWS Weather Integration** — official forecast context for the requested OGG flight time.
+4. **Recovery Intelligence** — historical operational recovery after event episodes.
+5. **Historical Analogue Retrieval** — similar prior Hawaii weather/airport incidents.
+6. **Airline Event Performance** — BTS-derived airline delay/cancellation behavior during matched historical event windows.
+7. **Inference Layer** — combines model probabilities, weather, historical evidence, recovery context, and model-maturity information.
+8. **Passenger Web Interface** — GitHub Pages-compatible FlightRescue application.
 
 ## Project structure
 
-- `data/raw/` — source datasets (not committed to Git)
-- `data/processed/` — cleaned/model-ready datasets
+- `api/` — Vercel/FastAPI entry point
+- `backend/` — production inference service
+- `data/raw/` — source datasets generated/downloaded as needed
+- `data/processed/` — cleaned/model-ready and compact inference datasets
+- `docs/` — public GitHub Pages passenger interface
+- `models/` — trained inference artifacts
 - `notebooks/` — research experiments and pipeline notebooks 01–09
-- `scripts/` — reproducible data-download scripts
+- `scripts/` — reproducible data download and aggregation scripts
 - `src/preprocessing/` — cleaning and data integration
 - `src/features/` — feature engineering
-- `src/models/` — predictive and recovery models
+- `src/models/` — predictive and recovery modeling code
 - `src/retrieval/` — historical similarity engine
-- `backend/` — FastAPI inference service target
-- `frontend/` — application frontend development area
-- `docs/` — GitHub Pages static prototype and project documentation
-- `models/` — trained model artifacts
 - `tests/` — automated tests
 
-## Roadmap
+## Current status
 
-**Completed research stages:** data acquisition, EDA, modeling-table construction, leakage-safe features, baseline classification, binary/severe risk models, recovery episodes, historical analog retrieval, and inference integration notebook.
+The research pipeline through Notebook 09 is complete. Trained inference artifacts are deployed through a FastAPI backend on Vercel, and the passenger-facing application is connected to the production service. Official NWS forecast integration is implemented for OGG, and the historical airline-event aggregation pipeline extends the application with airline-specific delay and cancellation evidence under similar historical conditions.
 
-**Current software stage:** package inference code and trained artifacts, expose a FastAPI endpoint, connect current weather/event inputs, then wire the API into the GitHub Pages UI.
+## Research-use notice
 
-## Status
-
-The research notebook pipeline is complete through Notebook 09. A GitHub Pages-compatible FlightRescue AI web prototype has been added under `docs/`; live inference remains the next software-development step.
+FlightRescue is an experimental research system and is **not an official airline, airport, FAA, NOAA, or National Weather Service product**. Predictions and historical comparisons are informational and should not be treated as guarantees of flight status. Travelers should confirm operational decisions with their airline and official aviation/weather sources.
